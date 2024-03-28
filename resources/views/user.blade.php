@@ -79,7 +79,60 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-    
+    <!-- JavaScript for adding and deleting records -->
+    <script>
+        // Array to store user data
+        let users = [];
+
+        // Function to render user table
+        function renderUserTable() {
+            const tableBody = document.getElementById('userTable');
+            tableBody.innerHTML = '';
+            
+            users.forEach(user => {
+                const imageUrl = user.image ? URL.createObjectURL(user.image) : ''; // Get image URL if available
+                tableBody.innerHTML += `
+                    <tr id="user_${user.id}">
+                        <td>${user.id}</td>
+                        <td>${user.name}</td>
+                        <td><img src="${imageUrl}" width="100" height="100"></td>
+                        <td>${user.address}</td>
+                        <td>${user.gender}</td>
+                        <td>
+                        <center>
+                            <button onclick="openViewUserModal(${user.id}, 'view')">View</button>
+                            <button onclick="openEditUserModal(${user.id})">Edit</button>
+                            <button onclick="deleteUser(${user.id})">Delete</button>
+                        </center>
+                        </td>
+                    </tr>
+                `;
+                
+            });
+        }
+
+        // Function to add new user
+        document.getElementById('addUserForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const name = document.getElementById('name').value;
+            const address = document.getElementById('address').value;
+            const gender = document.getElementById('gender').value;
+            const image = document.getElementById('image').files[0];
+            const newUser = {
+                id: users.length + 1, // Generate ID
+                name: name,
+                address: address,
+                gender: gender,
+                image: image
+            };
+            users.push(newUser);
+            renderUserTable();
+            alert('User added successfully.');
+            // Close the modal
+            $('#addUserModal').modal('hide');
+            // Clear form fields if needed
+            document.getElementById('addUserForm').reset();
+        });
 
     </script>
 </body>
