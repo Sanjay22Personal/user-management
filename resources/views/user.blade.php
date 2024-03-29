@@ -100,8 +100,15 @@
         <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Name</th>
+                    <th>
+                        ID
+                        <button class="btn btn-sm btn-outline-secondary" onclick="sortUsers('id')">Sort</button>
+                    </th>
+                    <th>
+                        Name
+                        <!-- Sorting button for Name -->
+                        <button class="btn btn-sm btn-outline-secondary" onclick="sortUsers('name')">Sort</button>
+                    </th>
                     <th>Image</th>
                     <th>Gender</th>
                     <th>Address</th>
@@ -149,6 +156,20 @@
                 `;
                 
             });
+        }
+
+        // Function to sort users based on attribute (id or name)
+        function sortUsers(attribute) {
+            // Sort users array based on the selected attribute
+            users.sort((a, b) => {
+                if (attribute === 'id') {
+                    return a.id - b.id;
+                } else if (attribute === 'name') {
+                    return a.name.localeCompare(b.name);
+                }
+            });
+            // Re-render the user table with sorted data
+            renderUserTable();
         }
 
         // Function to add new user
@@ -239,6 +260,18 @@
             document.getElementById('editViewAddress').value = '';
             document.getElementById('editViewGender').value = 'Male'; // Reset gender to default
         });
+
+        // Function to delete user
+        function deleteUser(userId) {
+            if (confirm('Are you sure you want to delete this user?')) {
+                const index = users.findIndex(user => user.id === userId);
+                if (index !== -1) {
+                    users.splice(index, 1);
+                    renderUserTable();
+                    alert('User deleted successfully.');
+                }
+            }
+        }
 
     </script>
 </body>
