@@ -12,9 +12,11 @@
         <center><h1>User Management</h1></center>
 
         <!-- Button to open Add User modal -->
+        <p align='right'>
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addUserModal">
             Add User
         </button>
+        </p>
 
         <!-- Add User Modal -->
         <div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="addUserModalLabel" aria-hidden="true">
@@ -119,9 +121,14 @@
                 <!-- Existing records will be dynamically added here -->
             </tbody>
         </table>
+        
+        <!-- Message for no users added -->
+        <div id="noUsersMessage" class="alert alert-info" style="display: block;">
+            <center>Oops! It looks like there are no users added yet. Start by adding a new user using the 'Add User' button above.</center>
+        </div>
+    </div>
 
-
-        <!-- Bootstrap JS -->
+    <!-- Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -135,27 +142,33 @@
         function renderUserTable() {
             const tableBody = document.getElementById('userTable');
             tableBody.innerHTML = '';
-            
-            users.forEach(user => {
-                const imageUrl = user.image ? URL.createObjectURL(user.image) : ''; // Get image URL if available
-                tableBody.innerHTML += `
-                    <tr id="user_${user.id}">
-                        <td>${user.id}</td>
-                        <td>${user.name}</td>
-                        <td><img src="${imageUrl}" width="100" height="100"></td>
-                        <td>${user.address}</td>
-                        <td>${user.gender}</td>
-                        <td>
-                        <center>
-                            <button onclick="openEditViewUserModal(${user.id}, 'view')">View</button>
-                            <button onclick="openEditViewUserModal(${user.id})">Edit</button>
-                            <button onclick="deleteUser(${user.id})">Delete</button>
-                        </center>
-                        </td>
-                    </tr>
-                `;
-                
-            });
+            if (users.length === 0) {
+            // If no users are added, display the message
+                document.getElementById('noUsersMessage').style.display = 'block';
+            } else {
+                // If users are added, hide the message and render table rows
+                document.getElementById('noUsersMessage').style.display = 'none';
+                users.forEach(user => {
+                    const imageUrl = user.image ? URL.createObjectURL(user.image) : ''; // Get image URL if available
+                    tableBody.innerHTML += `
+                        <tr id="user_${user.id}">
+                            <td>${user.id}</td>
+                            <td>${user.name}</td>
+                            <td><img src="${imageUrl}" width="100" height="100"></td>
+                            <td>${user.address}</td>
+                            <td>${user.gender}</td>
+                            <td>
+                                <center>
+                                    <button onclick="openEditViewUserModal(${user.id}, 'view')" class="button button1">View</button>
+                                    <button onclick="openEditViewUserModal(${user.id})" class="button button2">Edit</button>
+                                    <button onclick="deleteUser(${user.id})" class="button button3">Delete</button>
+                                </center>
+                            </td>
+                        </tr>
+                    `;
+                    
+                });
+            }
         }
 
         // Function to sort users based on attribute (id or name)
@@ -194,7 +207,7 @@
             // Clear form fields if needed
             document.getElementById('addUserForm').reset();
         });
-
+        
         // Function to open the edit/view user modal
         function openEditViewUserModal(userId, mode) {
             // Find user by ID
@@ -272,8 +285,105 @@
                 }
             }
         }
-
     </script>
 </body>
 </html>
 
+<style>
+    table {
+    border-collapse: collapse;
+    width: 100%;
+    }
+
+    th, td {
+    text-align: left;
+    padding: 8px;
+    }
+
+    tr:nth-child(even){background-color: #f2f2f2}
+
+    th {
+    background-color: #04AA6D;
+    color: white;
+    }
+
+    .button {
+    background-color: #04AA6D; /* Green */
+    border: none;
+    color: white;
+    padding: 16px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    }
+
+    .button1 {
+    background-color: white; 
+    color: black; 
+    border: 3px solid #04AA6D;
+    border-radius: 4px;
+    }
+
+    .button1:hover {
+    background-color: #04AA6D;
+    color: white;
+    }
+
+    .button2 {
+    background-color: white; 
+    color: black; 
+    border: 2px solid #008CBA;
+    border-radius: 4px;
+    }
+
+    .button2:hover {
+    background-color: #008CBA;
+    color: white;
+    }
+
+    .button3 {
+    background-color: white; 
+    color: black; 
+    border: 2px solid #f44336;
+    border-radius: 4px;
+    }
+
+    .button3:hover {
+    background-color: #f44336;
+    color: white;
+    }
+
+    input[type=text], select {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    }
+
+    input[type=submit] {
+    width: 100%;
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    }
+
+    input[type=submit]:hover {
+    background-color: #45a049;
+    }
+
+    div {
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    }
+</style>
